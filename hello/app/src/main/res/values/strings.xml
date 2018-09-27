@@ -1,0 +1,8 @@
+<resources>
+<<<<<<< HEAD
+    <string name="app_name">HelloWorld</string>
+=======
+    <string name="app_name">hello</string>
+    <string name="test">this is a test!</string>
+>>>>>>> second
+</resources>
