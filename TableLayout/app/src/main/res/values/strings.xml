@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TableLayout</string>
+    <string name="Button_Print">Print</string>
+    <string name="Button_Exit">Exit</string>
+</resources>

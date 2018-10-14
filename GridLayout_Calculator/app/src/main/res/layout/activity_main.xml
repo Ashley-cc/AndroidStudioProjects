@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <android.support.v7.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:rowCount="10"
+        app:columnCount="4"
+        app:layout_constraintHorizontal_weight="4"
+        >
+
+        <EditText
+            app:layout_gravity="fill"
+            android:layout_width="50dp"
+            android:layout_height="200dp"
+            app:layout_columnSpan="4"
+            />
+
+        <Button
+            android:text="C"
+            app:layout_columnSpan="2"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="+"
+            app:layout_columnSpan="2"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+        <Button
+            android:text="1"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+        <Button
+            android:text="2"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="3"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="-"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="4"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+        <Button
+            android:text="5"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="6"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="*"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="7"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+        <Button
+            android:text="8"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="9"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="="
+            app:layout_rowSpan="2"
+            app:layout_columnWeight="1"
+            app:layout_gravity="fill"
+            />
+
+        <Button
+            android:text="."
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+        <Button
+            android:text="0"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+        <Button
+            android:text="/"
+            app:layout_columnWeight="1"
+            android:layout_height="70dp"
+            />
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </android.support.v7.widget.GridLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RelativeLayout</string>
+    <string name="UserId">UserId</string>
+    <string name="UserIdText">Please Input Your UserId </string>
+    <string name="Password">Password</string>
+    <string name="PasswordText">Please Input Your Password</string>
+    <string name="Button_OK">OK</string>
+    <string name="Button_Cancel">Cancel</string>
+</resources>
