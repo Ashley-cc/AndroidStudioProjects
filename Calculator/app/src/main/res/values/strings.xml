@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Calculator</string>
+
+    <string name="btn1">1</string>
+    <string name="btn2">2</string>
+    <string name="btn3">3</string>
+    <string name="btn4">4</string>
+    <string name="btn5">5</string>
+    <string name="btn6">6</string>
+    <string name="btn7">7</string>
+    <string name="btn8">8</string>
+    <string name="btn9">9</string>
+    <string name="btn0">0</string>
+    <string name="btnadd">+</string>
+    <string name="btnsub">-</string>
+    <string name="btndev">/</string>
+    <string name="btnmlt">*</string>
+    <string name="btnmc">mc</string>
+    <string name="btnmr">mr</string>
+    <string name="btnms">m-</string>
+    <string name="btnma">m+</string>
+    <string name="btnans">=</string>
+    <string name="btnpnt">.</string>
+    <string name="btne">e</string>
+    <string name="btnclear">c</string>
+    <string name="btndel">del</string>
+    <string name="dft">0</string>
+    <string name="btnsqrt">√</string>
+    <string name="dao">1/x</string>
+
+</resources>
