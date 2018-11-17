@@ -1,5 +1,8 @@
 package com.example.clf.calculator;
 
+
+
+
 /*import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class SecondActivity extends AppCompatActivity implements View.OnClickListener {
     TextView text,text1,text2;//三个文本域
     double num1, num2;//操作数
     double sum;//运算结果
@@ -42,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_second);
         /*int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setContentView(R.layout.activity_main);
@@ -50,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setContentView(R.layout.activity_second);
         }*/
         text = (TextView) findViewById(R.id.textView);//输入文本域
-        text1 = (TextView) findViewById(R.id.textView1);//历史文本域一
-        text2 = (TextView) findViewById(R.id.textView2);//历史文本域
+       // text1 = (TextView) findViewById(R.id.textView1);//历史文本域一
+       // text2 = (TextView) findViewById(R.id.textView2);//历史文本域
         num1 = 0;//计数值1
         num2 = 0;//计数值2
         num2sign = false;//新计数值
@@ -94,14 +97,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnmlt.setOnClickListener(this);
         Button btndev = (Button) findViewById(R.id.buttondev);
         btndev.setOnClickListener(this);
-        Button btnmadd = (Button) findViewById(R.id.buttonmadd);
-        btnmadd.setOnClickListener(this);
-        Button btnmsub = (Button) findViewById(R.id.buttonmsub);
-        btnmsub.setOnClickListener(this);
-        Button btnmr = (Button) findViewById(R.id.buttonmr);
-        btnmr.setOnClickListener(this);
-        Button btnmc = (Button) findViewById(R.id.buttonmc);
-        btnmc.setOnClickListener(this);
+        //Button btnmadd = (Button) findViewById(R.id.buttonmadd);
+        //btnmadd.setOnClickListener(this);
+        //Button btnmsub = (Button) findViewById(R.id.buttonmsub);
+        //btnmsub.setOnClickListener(this);
+        //Button btnmr = (Button) findViewById(R.id.buttonmr);
+        //btnmr.setOnClickListener(this);
+       // Button btnmc = (Button) findViewById(R.id.buttonmc);
+        //btnmc.setOnClickListener(this);
         Button btnans = (Button) findViewById(R.id.buttonans);
         btnans.setOnClickListener(this);
         Button btnsqrt = (Button) findViewById(R.id.buttonsqrt);
@@ -110,6 +113,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btndel.setOnClickListener(this);
         Button btnc = (Button) findViewById(R.id.buttonc);
         btnc.setOnClickListener(this);
+        Button bttan = (Button) findViewById(R.id.bttan);
+        bttan.setOnClickListener(this);
+        Button btsin = (Button) findViewById(R.id.btsin);
+        btsin.setOnClickListener(this);
 
     }
 
@@ -181,11 +188,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.buttonc:
                 start();
                 text.setText("");
-                text1.setText("");
-                text2.setText("");
+                temp.delete(0,temp.length());
+                //text1.setText("");
+                //text2.setText("");
                 break;
             case R.id.buttonsqrt:
                 caulsqrt();
+                break;
+            case R.id.btsin:
+                sinCal();
                 break;
             case R.id.buttondel:
                 back();
@@ -218,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else if(temp.length()>0 && !num2sign){
                     sum+=Double.parseDouble(temp.toString());
                     mcount=true;
-                    Toast.makeText(MainActivity.this, "M+", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SecondActivity.this, "M+", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -230,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else  if (temp.length() > 0 && !num2sign) {
                     sum -= Double.parseDouble(temp.toString());
                     mcount = true;
-                    Toast.makeText(MainActivity.this, "M-", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SecondActivity.this, "M-", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case 'C':sum=0;
@@ -238,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 text1.setText("");
                 text2.setText("");*/
                 mcount=false;
-                Toast.makeText(MainActivity.this, "MC", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SecondActivity.this, "MC", Toast.LENGTH_SHORT).show();
                 break;
             case 'R':
                 if(mcount) {
@@ -253,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         else temp.append(String.valueOf(sum));
                         text.setText(temp.toString());
                     }
-                    Toast.makeText(MainActivity.this, "MR", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SecondActivity.this, "MR", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -263,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(comeout) {
             if(num1<0)
             {
-                Toast.makeText(MainActivity.this, "data shouldn't be negtive!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SecondActivity.this, "data shouldn't be negtive!", Toast.LENGTH_SHORT).show();
 
             }else {
                 num1 = Math.sqrt(num1);
@@ -273,15 +284,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             double current;
             current=Double.parseDouble(temp.toString());
             if(current>=0) {
-                current=current*current;//current = Math.sqrt(current);
+                current = Math.sqrt(current);
                 int len = temp.length();
                 temp.delete(0, len);
                 temp.append(String.valueOf(current));
                 text.setText(temp.toString());
             }
             else{
-                Toast.makeText(MainActivity.this, "data shouldn't be negtive!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SecondActivity.this, "data shouldn't be negtive!", Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+    //sin
+    public void sinCal() {
+        if(comeout) {
+
+                num1 = Math.sin(num1);
+                text.setText(String.valueOf(num1));
+
+        }else if(temp.length()>0){
+            double current;
+            current=Double.parseDouble(temp.toString());
+
+                current=Math.sin(current);//current = Math.sqrt(current);
+                int len = temp.length();
+                temp.delete(0, len);
+                temp.append(String.valueOf(current));
+                text.setText(temp.toString());
         }
     }
     //初始化
@@ -305,15 +334,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 num1 = Double.parseDouble(temp.toString());
             comeout=false;
             num1alive = true;
-            text2.setText(String.valueOf(num1));
-            text1.setText(String.valueOf(op));
+            //text2.setText(String.valueOf(num1));
+           // text1.setText(String.valueOf(op));
+            text.setText(String.valueOf(num1)+String.valueOf(op));
             int len = temp.length();
             temp.delete(0, len);
             num2sign = false;
             decimal=false;
             if (num2is_ngt) temp.append('-');
             temp.append(num);
-            text.setText(temp.toString());
+            text.setText(text.getText()+temp.toString());
         }else {
             if(num1is_ngt)
             {
@@ -337,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     //输入运算符
     public void opchar(char a) {
-       if(num1alive)
+        if(num1alive)
         {
             //text2.setText("");
             result();
@@ -356,9 +386,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 op = a;
                 num2is_ngt = false;
             }
-            if(comeout)text1.setText(String.valueOf(num1));
-            else text1.setText(temp.toString());
-            text.setText(String.valueOf(op));
+            if(comeout)text.setText(String.valueOf(num1));
+            else text.setText(temp.toString());
+            text.setText(text.getText()+String.valueOf(op));
             if(num2is_ngt)text.append("-");
             num2sign=true;
         }
@@ -382,10 +412,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void result() {
         if (num1alive) {
             num2 = Double.parseDouble(temp.toString());
-            text1.setText(String.valueOf(op));
-            text1.append(String.valueOf(num2));
+            text.setText(text.getText()+String.valueOf(op));
+            text.append(String.valueOf(num2));
             if (op == '/' && num2 == 0)
-                Toast.makeText(MainActivity.this, "wrong operator!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SecondActivity.this, "wrong operator!", Toast.LENGTH_SHORT).show();
             else {
                 comeout=true;
                 num1alive=false;
@@ -411,20 +441,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-//通过item屏幕切换
-    public boolean onCreateOptionsMenu(Menu menu){
+    //通过item屏幕切换
+   /* public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.main,menu);
         return true;
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
-            if(item.getItemId()==R.id.change_item) {
-                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-                startActivity(intent);
-            }
+        if(item.getItemId()==R.id.change_item) {
+            Intent intent = new Intent(SecondActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
 
         return true;
-    }
+    }*/
 }
+
 

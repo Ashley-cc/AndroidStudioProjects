@@ -28,4 +28,26 @@
     <string name="btnsqrt">√</string>
     <string name="dao">1/x</string>
 
+
+    <string name="bttan">tan</string>
+    <string name="btsin">sin</string>
+    <string name="btcos">cos</string>
+
+    <string name="bttanh">tanh</string>
+    <string name="btsinh">sinh</string><!--双曲正弦-->
+    <string name="btcosh">cosh</string>
+
+    <string name="btconmul">x!</string>
+    <string name="btlog">log</string>
+    <string name="btindex">index</string>
+
+    <string name="btpi">pi</string>
+    <string name="btsquare">x^2</string>
+    <string name="btcube">x^3</string>
+
+    <string name="btcoverse">1/x</string>
+    <string name="btatan">atan</string><!--反正弦-->
+    <string name="btasin">asin</string>
+    <string name="btacos">acos</string>
+
 </resources>
