@@ -94,14 +94,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnmlt.setOnClickListener(this);
         Button btndev = (Button) findViewById(R.id.buttondev);
         btndev.setOnClickListener(this);
-        Button btnmadd = (Button) findViewById(R.id.buttonmadd);
-        btnmadd.setOnClickListener(this);
-        Button btnmsub = (Button) findViewById(R.id.buttonmsub);
-        btnmsub.setOnClickListener(this);
-        Button btnmr = (Button) findViewById(R.id.buttonmr);
-        btnmr.setOnClickListener(this);
-        Button btnmc = (Button) findViewById(R.id.buttonmc);
-        btnmc.setOnClickListener(this);
+       // Button btnmadd = (Button) findViewById(R.id.buttonmadd);
+        //btnmadd.setOnClickListener(this);
+        //Button btnmsub = (Button) findViewById(R.id.buttonmsub);
+        //btnmsub.setOnClickListener(this);
+       // Button btnmr = (Button) findViewById(R.id.buttonmr);
+        //btnmr.setOnClickListener(this);
+        //Button btnmc = (Button) findViewById(R.id.buttonmc);
+       // btnmc.setOnClickListener(this);
         Button btnans = (Button) findViewById(R.id.buttonans);
         btnans.setOnClickListener(this);
         Button btnsqrt = (Button) findViewById(R.id.buttonsqrt);
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 break;
-            case R.id.buttonmadd:
+           /* case R.id.buttonmadd:
                 M('+');
                 break;
             case R.id.buttonmsub:
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.buttonmc:
                 M('C');
-                break;
+                break;*/
             case R.id.buttonc:
                 start();
                 text.setText("");

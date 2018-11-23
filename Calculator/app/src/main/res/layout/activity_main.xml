@@ -57,7 +57,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
+       <!-- <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
@@ -72,6 +72,7 @@
                 android:textColor="@color/wordcolor"
                 android:background="@drawable/buttonstyle2"
                 android:textSize="25sp"/>
+            &lt;!&ndash;android:background="@drawable/buttonstyle2"&ndash;&gt;
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/btnma"
@@ -80,8 +81,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttonmadd"
                 android:textColor="@color/wordcolor"
-                android:background="@drawable/buttonstyle2"
+
                 android:textSize="25sp"/>
+            &lt;!&ndash;android:background="@drawable/buttonstyle2"&ndash;&gt;
 
             <Button
                 style="?android:attr/buttonBarButtonStyle"
@@ -91,9 +93,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttonmsub"
                 android:textColor="@color/wordcolor"
-                android:background="@drawable/buttonstyle2"
-                android:textSize="25sp"/>
 
+                android:textSize="25sp"/>
+            &lt;!&ndash;  android:background="@drawable/buttonstyle2"&ndash;&gt;
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/btnmr"
@@ -102,9 +104,10 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttonmr"
                 android:textColor="@color/wordcolor"
-                android:background="@drawable/buttonstyle3"
+
                 android:textSize="25sp" />
-        </LinearLayout>
+            &lt;!&ndash; android:background="@drawable/buttonstyle3"&ndash;&gt;
+        </LinearLayout>-->
 
     <!--两个 Buttons 放在一个布局里会被判断为按钮栏，需要添加样式取消它的边框。-->
         <LinearLayout
@@ -120,8 +123,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttonc"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle"
+
                 android:textSize="25sp"/>
+            <!-- android:background="@drawable/buttonstyle"-->
 
 
             <Button
@@ -132,9 +136,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttonmlt"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle"
-                android:textSize="35sp" />
 
+                android:textSize="35sp" />
+            <!-- android:background="@drawable/buttonstyle"-->
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/btndev"
@@ -143,8 +147,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttondev"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle"
+
                 android:textSize="25sp" />
+            <!-- android:background="@drawable/buttonstyle"-->
 
             <Button
                 style="?android:attr/buttonBarButtonStyle"
@@ -154,9 +159,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttondel"
                 android:textColor="#ff0000"
-                android:background="@drawable/buttonstyle4"
-                android:textSize="35sp" />
 
+                android:textSize="35sp" />
+            <!--  android:background="@drawable/buttonstyle4"-->
 
         </LinearLayout>
 
@@ -173,8 +178,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/button7"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle"
+
                 android:textSize="25sp" />
+            <!--android:background="@drawable/buttonstyle"-->
 
 
             <Button
@@ -183,11 +189,11 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/buttonstyle"
+
                 android:text="@string/btn8"
                 android:textColor="#ffffff"
                 android:textSize="25sp" />
-
+            <!-- android:background="@drawable/buttonstyle"-->
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/btn9"
@@ -196,9 +202,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/button9"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle"
-                android:textSize="25sp" />
 
+                android:textSize="25sp" />
+            <!-- android:background="@drawable/buttonstyle"-->
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/btnsub"
@@ -207,9 +213,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttonsub"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle4"
-                android:textSize="35sp" />
 
+                android:textSize="35sp" />
+            <!-- android:background="@drawable/buttonstyle4"-->
         </LinearLayout>
 
 
@@ -225,8 +231,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/button4"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle"
+
                 android:textSize="25sp" />
+            <!--  android:background="@drawable/buttonstyle"-->
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/btn5"
@@ -235,9 +242,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/button5"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle"
-                android:textSize="25sp" />
 
+                android:textSize="25sp" />
+            <!-- android:background="@drawable/buttonstyle"-->
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/btn6"
@@ -246,9 +253,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/button6"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle"
-                android:textSize="25sp" />
 
+                android:textSize="25sp" />
+            <!-- android:background="@drawable/buttonstyle"-->
             <Button
                 style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/btnadd"
@@ -257,8 +264,9 @@
                 android:layout_height="match_parent"
                 android:id="@+id/buttonadd"
                 android:textColor="#ffffff"
-                android:background="@drawable/buttonstyle4"
+
                 android:textSize="25sp" />
+            <!--  android:background="@drawable/buttonstyle4"-->
         </LinearLayout>
 
 
@@ -285,9 +293,9 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button1"
                         android:textColor="#ffffff"
-                        android:background="@drawable/buttonstyle"
-                        android:textSize="25sp" />
 
+                        android:textSize="25sp" />
+                    <!-- android:background="@drawable/buttonstyle"-->
                     <Button
                         style="?android:attr/buttonBarButtonStyle"
                         android:text="@string/btn2"
@@ -296,9 +304,9 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button2"
                         android:textColor="#ffffff"
-                        android:background="@drawable/buttonstyle"
-                        android:textSize="25sp" />
 
+                        android:textSize="25sp" />
+                   <!-- android:background="@drawable/buttonstyle"-->
                     <Button
                         style="?android:attr/buttonBarButtonStyle"
                         android:text="@string/btn3"
@@ -307,10 +315,10 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button3"
                         android:textColor="#ffffff"
-                        android:background="@drawable/buttonstyle"
+
                         android:textSize="25sp" />
 
-
+                    <!-- android:background="@drawable/buttonstyle"-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -326,8 +334,9 @@
                         android:layout_height="match_parent"
                         android:id="@+id/button0"
                         android:textColor="#ffffff"
-                        android:background="@drawable/buttonstyle"
+
                         android:textSize="25sp"/>
+                    <!-- android:background="@drawable/buttonstyle"-->
                     <Button
                         style="?android:attr/buttonBarButtonStyle"
                         android:text="@string/btnpnt"
@@ -336,8 +345,9 @@
                         android:layout_height="match_parent"
                         android:id="@+id/buttonpoint"
                         android:textColor="#ffffff"
-                        android:background="@drawable/buttonstyle"
+
                         android:textSize="35sp" />
+                    <!--android:background="@drawable/buttonstyle"-->
                     <Button
                         style="?android:attr/buttonBarButtonStyle"
                         android:text="@string/btnsqrt"
@@ -346,10 +356,10 @@
                         android:layout_height="match_parent"
                         android:id="@+id/buttonsqrt"
                         android:textColor="#ffffff"
-                        android:background="@drawable/buttonstyle"
+
                         android:textSize="25sp"/>
 
-
+                    <!-- android:background="@drawable/buttonstyle"-->
                 </LinearLayout>
 
             </LinearLayout>

@@ -530,8 +530,10 @@ android:layout_weight="2">
         android:layout_height="match_parent"
         android:id="@+id/buttonans"
         android:textColor="#ffffff"
-        android:background="#009393"
+        android:background="@drawable/buttonstyle"
         android:textSize="45sp" />
+        <!--android:background="#009393"-->
+
 </LinearLayout>
 </LinearLayout>
 

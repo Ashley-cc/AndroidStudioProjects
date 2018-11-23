@@ -117,6 +117,32 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
         bttan.setOnClickListener(this);
         Button btsin = (Button) findViewById(R.id.btsin);
         btsin.setOnClickListener(this);
+        Button btcos = (Button) findViewById(R.id.btcos);
+        btcos.setOnClickListener(this);
+        Button btcosh = (Button) findViewById(R.id.btcosh);
+        btcosh.setOnClickListener(this);
+        Button btsinh = (Button) findViewById(R.id.btsinh);
+        btsinh.setOnClickListener(this);
+        Button bttanh = (Button) findViewById(R.id.bttanh);
+        bttanh.setOnClickListener(this);
+        Button btatan = (Button) findViewById(R.id.btatan);
+        btatan.setOnClickListener(this);
+        Button btasin = (Button) findViewById(R.id.btasin);
+        btasin.setOnClickListener(this);
+        Button btacos = (Button) findViewById(R.id.btacos);
+        btacos.setOnClickListener(this);
+        Button btpi = (Button) findViewById(R.id.btpi);
+        btpi.setOnClickListener(this);
+        Button btlog = (Button) findViewById(R.id.btlog);
+        btlog.setOnClickListener(this);
+        Button btconmul = (Button) findViewById(R.id.btconmul);
+        btconmul.setOnClickListener(this);
+        Button btsquare = (Button) findViewById(R.id.btsquare);
+        btsquare.setOnClickListener(this);
+        Button btcube = (Button) findViewById(R.id.btcube);
+        btcube.setOnClickListener(this);
+        Button btindex = (Button) findViewById(R.id.btindex);
+        btindex.setOnClickListener(this);
 
     }
 
@@ -154,6 +180,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.button9:
                 save('9');
                 break;
+
             case R.id.buttonmlt:
                 opchar('*');
                 break;
@@ -166,6 +193,9 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.buttondev:
                 opchar('/');
                 break;
+            case R.id.btindex:
+                opchar('^');
+                break;
             case R.id.buttonpoint:
                 if(!decimal) {
                     decimal=true;
@@ -173,7 +203,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
                 }
 
                 break;
-            case R.id.buttonmadd:
+           /* case R.id.buttonmadd:
                 M('+');
                 break;
             case R.id.buttonmsub:
@@ -184,7 +214,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.buttonmc:
                 M('C');
-                break;
+                break;*/
             case R.id.buttonc:
                 start();
                 text.setText("");
@@ -196,7 +226,46 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
                 caulsqrt();
                 break;
             case R.id.btsin:
-                sinCal();
+                Cal("sin");
+                break;
+            case R.id.bttan:
+                Cal("tan");
+                break;
+            case R.id.btcos:
+                Cal("cos");
+                break;
+            case R.id.btsinh:
+                Cal("sinh");
+                break;
+            case R.id.bttanh:
+                Cal("tanh");
+                break;
+            case R.id.btcosh:
+                Cal("cosh");
+                break;
+            case R.id.btasin:
+                Cal("asin");
+                break;
+            case R.id.btatan:
+                Cal("atan");
+                break;
+            case R.id.btacos:
+                Cal("acos");
+                break;
+            case R.id.btpi:
+                save('P');
+                break;
+            case R.id.btconmul:
+                Cal("conmul");
+                break;
+            case R.id.btsquare:
+                Cal("square");
+                break;
+            case R.id.btcube:
+                Cal("cube");
+                break;
+            case R.id.btlog:
+                Cal("log");
                 break;
             case R.id.buttondel:
                 back();
@@ -295,24 +364,7 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
     }
-    //sin
-    public void sinCal() {
-        if(comeout) {
 
-                num1 = Math.sin(num1);
-                text.setText(String.valueOf(num1));
-
-        }else if(temp.length()>0){
-            double current;
-            current=Double.parseDouble(temp.toString());
-
-                current=Math.sin(current);//current = Math.sqrt(current);
-                int len = temp.length();
-                temp.delete(0, len);
-                temp.append(String.valueOf(current));
-                text.setText(temp.toString());
-        }
-    }
     //初始化
     public void start() {
         num1 = 0;
@@ -331,7 +383,8 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
     public  void save(char num) {
         if(num2sign) {
             if(!comeout)
-                num1 = Double.parseDouble(temp.toString());
+                if(num=='P')num1=Math.PI;
+               else  num1 = Double.parseDouble(temp.toString());
             comeout=false;
             num1alive = true;
             //text2.setText(String.valueOf(num1));
@@ -361,7 +414,9 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
                 Mnum=false;temp.append(num);
                 text.setText(temp.toString());
             }
-            temp.append(num);
+            if(num=='P')
+                temp.append(String.valueOf(Math.PI));
+            else temp.append(num);
             text.setText(temp.toString());
         }
     }
@@ -433,6 +488,9 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
                     case '/':
                         num1 = num1 / num2;
                         break;
+                    case '^':
+                        num1 = Math.pow(num1,num2);
+                        break;
                 }
                 text.setText("=");
                 text.append(String.valueOf(num1));
@@ -440,6 +498,72 @@ public class SecondActivity extends AppCompatActivity implements View.OnClickLis
             }
         }
     }
+
+    //sin
+    public void Cal(String x) {
+        if(comeout) {
+            if(x.equals("sin"))num1 = Math.sin(num1);
+            else if(x.equals("tan"))num1=Math.tan(num1);
+            else if(x.equals("cos"))num1=Math.cos(num1);
+            else if(x.equals("cosh"))num1=Math.cosh(num1);
+            else if(x.equals("sinh"))num1=Math.sinh(num1);
+            else if(x.equals("tanh"))num1=Math.tanh(num1);
+            else if(x.equals("atan"))num1=Math.atan(num1);
+            else if(x.equals("acos"))num1=Math.acos(num1);
+            else if(x.equals("asin"))num1=Math.asin(num1);
+            else if(x.equals("log"))num1=Math.log(num1);
+            else if(x.equals("square"))num1=num1*num1;
+            else if(x.equals("cube"))num1=num1*num1*num1;
+            else if(x.equals("conmul")){
+                int sum=1;
+                for(int i=1;i<=num1;i++){
+                    sum=sum*i;
+                }
+                num1=sum;
+                if(num1==0)num1=0;
+
+            }
+            if(x.equals("conmul")&&num1<0){
+
+                text.setText("ERROR!");
+            }
+           else
+              text.setText(String.valueOf(num1));
+
+        }else if(temp.length()>0){
+            double current;
+            current=Double.parseDouble(temp.toString());
+            if(x.equals("sin"))current = Math.sin(current);
+            else if(x.equals("tan"))current=Math.tan(current);
+            else if(x.equals("cos"))current=Math.cos(current);
+            else if(x.equals("cosh"))current=Math.cosh(current);
+            else if(x.equals("sinh"))current=Math.sinh(current);
+            else if(x.equals("tanh"))current=Math.tanh(current);
+            else if(x.equals("atan"))current=Math.atan(current);
+            else if(x.equals("acos"))current=Math.acos(current);
+            else if(x.equals("asin"))current=Math.asin(current);
+            else if(x.equals("log"))current=Math.log(current);
+            else if(x.equals("square"))current=current*current;
+            else if(x.equals("cube"))current=current*current*current;
+            else if(x.equals("conmul")){
+                int sum=1;
+                for(int i=1;i<=current;i++){
+                    sum=sum*i;
+                }
+                current=sum;
+                if(current==0)current=0;
+            }
+
+            //current=Math.sin(current);//current = Math.sqrt(current);
+            int len = temp.length();
+            temp.delete(0, len);
+            temp.append(String.valueOf(current));
+            text.setText(temp.toString());
+        }
+    }
+
+
+
 
     //通过item屏幕切换
    /* public boolean onCreateOptionsMenu(Menu menu){
