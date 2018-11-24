@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <!--<fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.example.clf.fragment2.LeftFragment"
+            android:id="@+id/left_fragment"></fragment>-->
+        <fragment
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:name="com.example.clf.fragment2.LeftFragment"
+            android:id="@+id/left_fragment"
+            android:layout_weight="1"></fragment>
+       <!-- <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:id="@+id/words_content_layout"></FrameLayout>-->
+        <fragment
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:name="com.example.clf.fragment2.RightFragment"
+            android:id="@+id/right_fragment"
+            android:layout_weight="1"></fragment>
+   <!-- <fragment
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:id="@+id/left_fragment"
+        android:name="com.example.clf.fragment2.LeftFragment"/>-->
+
+       <!-- <fragment
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="1"
+                 android:id="@+id/right_fragment"
+                 android:name="com.example.clf.fragment2.RightFragment"/>-->
+     <!--   <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/right_layout"
+            android:layout_weight="1"></FrameLayout>-->
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
