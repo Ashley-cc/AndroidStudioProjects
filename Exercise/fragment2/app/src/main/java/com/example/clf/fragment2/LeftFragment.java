@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -69,8 +70,6 @@ public class LeftFragment extends Fragment {
 
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-
-
     }
 
     /*public void onActivityCreated(Bundle savedInstanceState){
@@ -119,21 +118,29 @@ public class LeftFragment extends Fragment {
 
         //Words word1=new Words();
 
-        wordList.add(new Words("banana","香蕉","i love banana!"));
-        wordList.add(new Words("apple","苹果","Here is an Apple Tree!"));
+      /*  wordList.add(new Words("banana","香蕉","i love banana!"));
+        wordList.add(new Words("apple","苹果","Here is an Apple Tree!"));*/
         //db.execSQL("insert into words values(?,?,?)",new Object[]{w,m,s});
 
 
-      /*  while(!c.isAfterLast()){*/while(c.moveToNext()){
+      /*  while(!c.isAfterLast()){*/for(int i=0;i<c.getCount();i++){
             Words word=new Words();
             word.setWord(c.getString(0));
             word.setMeaning(c.getString(1));
             word.setSample(c.getString(2));
             wordList.add(word);
+            c.moveToNext();
         }
         c.close();
         return wordList;
     }
+
+    public void showWords(){
+
+    }
+
+
+
 
 
     /*public void StartActivity(Context context,String wordsWord,String wordsMeaning,String wordsSample){

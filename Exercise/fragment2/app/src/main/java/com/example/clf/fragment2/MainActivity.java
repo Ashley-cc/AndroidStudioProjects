@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         db.execSQL(sql, new String[]{"orange", "橙子", "I love orange!"});*/
-        /* String sql="delete  from words where word='orange'";
+       /*  String sql="delete  from words where word='grape'";
          SQLiteDatabase db = mDbHelper.getReadableDatabase();
         db.execSQL(sql);*/
         //SQLiteDatabase db = mDbHelper.getReadableDatabase();
@@ -61,13 +62,14 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         int id = item.getItemId();
         switch (id) {
             case R.id.action_search:
-                //SearchDialog();
+                SearchDialog();
                 return true;
             case R.id.action_insert:
                 InsertDialog();
                 // LeftFragment leftFragment=(LeftFragment) getSupportFragmentManager().findFragmentById(R.id.left_fragment);
-               /* replaceFragment(new LeftFragment());
-                LeftFragment leftfragment=(LeftFragment)getSupportFragmentManager().findFragmentById(R.id.left_fragment);*/
+                replaceFragment(new LeftFragment());
+                //LeftFragment leftfragment=(LeftFragment)getSupportFragmentManager().findFragmentById(R.id.left_fragment);
+
                 Toast.makeText(this, "you clicked the insert menu", Toast.LENGTH_LONG).show();
                 return true;
         }
@@ -113,30 +115,63 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 .show();//显示对话框
     }
 
+    //使用Sql语句查找
+    private  Cursor SearchUseSql(String strWordSearch) {
+        /*List<Words> swordList=new ArrayList<Words>();*/
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String sql="select * from words where word like ? order by word desc";
+        Cursor c=db.rawQuery(sql,new String[]{"%"+strWordSearch+"%"});
+       /* c.moveToFirst();
+        Words word=new Words();
+        if(c.moveToNext()) {*/
+           /* Words word = new Words();*/
+          /*  word.setWord(c.getString(0));
+            word.setMeaning(c.getString(1));
+            word.setSample(c.getString(2));*/
+            /*swordList.add(word);*/
 
-   /* //查询对话框
+       /* }*/
+        /*if(swordList.isEmpty()){
+            Toast.makeText(this, "查找不到该单词！", Toast.LENGTH_LONG).show();
+        }*/
+
+        return c;
+
+    }
+
+
+   //查询对话框
     private void SearchDialog() {
-        final TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.searchterm, null);
+        final TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.search, null);
         new AlertDialog.Builder(this)
-                .setTitle("新增单词")//标题
+                .setTitle("查找单词")//标题
                 .setView(tableLayout)//设置视图
                 //确定按钮及其动作
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String txtSearchWord=((EditText)tableLayout.findViewById(R.id.txtSearchWord)).getText().toString();
-                        ArrayList<Map<String, String>> items=null;
-                        items=SearchUseSql(txtSearchWord);
-                        if(items.size()>0) {
-                            Bundle bundle=new Bundle();
-                            bundle.putSerializable("result",items);
-                            Intent intent=new Intent(MainActivity.this,SearchActivity.class);
-                            intent.putExtras(bundle);
-                            startActivity(intent);
-                        }else
+                        String txtSearchWord = ((EditText) tableLayout.findViewById(R.id.txtSearchWord)).getText().toString();
+                        //ArrayList<Map<String, String>> items=null;
+                        //items=SearchUseSql(txtSearchWord);
+                        /* List<Words> swordList=new ArrayList<Words>();*/
+                        //Words word=new Words();
+                        //Words word=SearchUseSql(txtSearchWord);
+                        Cursor c = SearchUseSql(txtSearchWord);
+                        c.moveToFirst();
+                        if(c.getCount()>0){
+                            RightFragment wordsContentFragment = (RightFragment) getSupportFragmentManager().findFragmentById(R.id.right_fragment);
+                            wordsContentFragment.showWordContent(c.getString(0), c.getString(1), c.getString(2));
+                           /* Bundle bundle=new Bundle();
+                            bundle.putSerializable("result",items);*/
+                            // Intent intent=new Intent(MainActivity.this,SearchActivity.class);
+                            //intent.putExtras(bundle);
+                            //startActivity(intent);
+                        }else{
                             Toast.makeText(MainActivity.this,"没有找到", Toast.LENGTH_LONG).show();
+                        }
                     }
                 })
+
                 //取消按钮及其动作
                 .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
@@ -145,7 +180,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 .create()//创建对话框
                 .show();//显示对话框
 
-    }*/
+    }
 
 
 
@@ -211,6 +246,10 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
             wordList.add(word);
         }
         return wordList;
+    }*/
+
+   /* public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){//长按菜单将调出
+        getMenuInflater().inflate(R.menu.contextmenu,menu);
     }*/
 }
 
