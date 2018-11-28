@@ -14,8 +14,8 @@ public class RightFragment extends Fragment {
         return view;
     }
     public void showWordContent(String newsWord,String newsMeaning,String newsSample){
-        View visibilityLayout=view.findViewById(R.id.visibility_layout);
-        visibilityLayout.setVisibility(View.VISIBLE);
+        //View visibilityLayout=view.findViewById(R.id.visibility_layout);
+        //visibilityLayout.setVisibility(View.VISIBLE);
         TextView wordsWordText=(TextView)view.findViewById(R.id.words_word);
         TextView wordsMeaningText=(TextView)view.findViewById(R.id.words_meaning);
         TextView wordsSampleText=(TextView)view.findViewById(R.id.words_sample);
