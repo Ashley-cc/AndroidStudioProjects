@@ -148,7 +148,18 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         }*/
 
         return c;
+    }
+    //精准查找,删除修改时确定单词中是否存在该词
+    private  Cursor Search(String strWordSearch) {
+        /*List<Words> swordList=new ArrayList<Words>();*/
 
+       /* SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String sql = "select * from words where word ='" + strWordSearch +"'";
+        Cursor c = db.rawQuery(sql);*/
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String sql="select * from words where word = ? order by word desc";
+        Cursor c=db.rawQuery(sql,new String[]{"%"+strWordSearch+"%"});
+        return c;
     }
 
 
@@ -225,7 +236,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String txtDeleteWord = ((EditText) tableLayout.findViewById(R.id.txtDeleteWord)).getText().toString();
-                        Cursor c = SearchUseSql(txtDeleteWord);
+                        Cursor c = Search(txtDeleteWord);
                         c.moveToFirst();
                         if(c.getCount()>0) {
                             DeleteUseSql(txtDeleteWord);
@@ -272,7 +283,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         String strNewWord = ((EditText) tableLayout.findViewById(R.id.txtWord)).getText().toString();
                         String strNewMeaning = ((EditText) tableLayout.findViewById(R.id.txtMeaning)).getText().toString();
                         String strNewSample = ((EditText) tableLayout.findViewById(R.id.txtSample)).getText().toString();
-                        Cursor c = SearchUseSql(strNewWord);
+                        Cursor c = Search(strNewWord);
                         c.moveToFirst();
                         if(c.getCount()>0) {
                             UpdateUseSql(strNewWord, strNewMeaning, strNewSample);
