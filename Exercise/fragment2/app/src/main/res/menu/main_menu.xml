@@ -8,4 +8,12 @@
         android:id="@+id/action_insert"
         android:title="新增"/>
 
+    <item
+        android:id="@+id/action_delete"
+        android:title="删除"/>
+
+    <item
+        android:id="@+id/action_modify"
+        android:title="修改"/>
+
 </menu>

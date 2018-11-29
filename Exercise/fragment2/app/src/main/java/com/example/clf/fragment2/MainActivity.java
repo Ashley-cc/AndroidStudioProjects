@@ -11,9 +11,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -67,10 +69,20 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
             case R.id.action_insert:
                 InsertDialog();
                 // LeftFragment leftFragment=(LeftFragment) getSupportFragmentManager().findFragmentById(R.id.left_fragment);
-                replaceFragment(new LeftFragment());
-                //LeftFragment leftfragment=(LeftFragment)getSupportFragmentManager().findFragmentById(R.id.left_fragment);
+                //replaceFragment(new LeftFragment());
+                LeftFragment leftfragment=(LeftFragment)getSupportFragmentManager().findFragmentById(R.id.left_fragment);
+               // mDbHelper = new WordsDBHelper(this);
+                //replaceFragment(new LeftFragment());
 
+
+                //leftfragment.onAttach(this);
                 Toast.makeText(this, "you clicked the insert menu", Toast.LENGTH_LONG).show();
+                return true;
+            case R.id.action_delete:
+                DeleteDialog();
+                return true;
+            case R.id.action_modify:
+                UpdateDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -193,6 +205,93 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 break;
         }
     }*/
+
+
+    private void DeleteUseSql(String strId) {
+        String sql="delete from words where word='"+strId+"'";
+        //Gets the data repository in write mode*/
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        db.execSQL(sql);
+    }
+
+    //删除对话框
+    private void DeleteDialog(/*final String strId*/) {
+        final TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.delete, null);
+        new AlertDialog.Builder(this)
+                .setTitle("删除单词")
+                .setView(tableLayout)
+                //.setMessage("确定要删除该单词吗？")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String txtDeleteWord = ((EditText) tableLayout.findViewById(R.id.txtDeleteWord)).getText().toString();
+                        Cursor c = SearchUseSql(txtDeleteWord);
+                        c.moveToFirst();
+                        if(c.getCount()>0) {
+                            DeleteUseSql(txtDeleteWord);
+                            Toast.makeText(MainActivity.this,"删除成功！", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this,"单词本中无该词，无法删除！", Toast.LENGTH_LONG).show();
+
+                        }
+                        //setWordsListView(getAll());
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                    }
+                })
+                .create()
+                .show();
+    }
+
+
+
+    //使用Sql语句更新单词
+    private void UpdateUseSql(String strWord, String strMeaning, String strSample) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String sql="update words set word=?,meaning=?,sample=? where word='"+strWord+"'";
+        db.execSQL(sql, new String[]{strWord, strMeaning, strSample});
+    }
+
+    //修改对话框
+    private void UpdateDialog(/*final String strId, final String strWord, final String strMeaning, final String strSample*/) {
+        final TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.modify, null);
+       /* ((EditText)tableLayout.findViewById(R.id.txtWord)).setText(strWord);
+        ((EditText)tableLayout.findViewById(R.id.txtMeaning)).setText(strMeaning);
+        ((EditText)tableLayout.findViewById(R.id.txtSample)).setText(strSample);*/
+        new AlertDialog.Builder(this)
+                .setTitle("修改单词")//标题
+                .setView(tableLayout)//设置视图
+                //确定按钮及其动作
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String strNewWord = ((EditText) tableLayout.findViewById(R.id.txtWord)).getText().toString();
+                        String strNewMeaning = ((EditText) tableLayout.findViewById(R.id.txtMeaning)).getText().toString();
+                        String strNewSample = ((EditText) tableLayout.findViewById(R.id.txtSample)).getText().toString();
+                        Cursor c = SearchUseSql(strNewWord);
+                        c.moveToFirst();
+                        if(c.getCount()>0) {
+                            UpdateUseSql(strNewWord, strNewMeaning, strNewSample);
+                            Toast.makeText(MainActivity.this,"修改成功！", Toast.LENGTH_LONG).show();
+                        }else{
+                            Toast.makeText(MainActivity.this,"单词本中不存在该词，请先添加才能进行修改！", Toast.LENGTH_LONG).show();
+                        }
+                        //setWordsListView(getAll());
+                    }
+                })
+                //取消按钮及其动作
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {}
+                })
+                .create()//创建对话框
+                .show();//显示对话框
+    }
+
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
