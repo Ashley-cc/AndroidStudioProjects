@@ -109,8 +109,15 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         String strWord = ((EditText) tableLayout.findViewById(R.id.txtWord)).getText().toString();
                         String strMeaning = ((EditText) tableLayout.findViewById(R.id.txtMeaning)).getText().toString();
                         String strSample = ((EditText) tableLayout.findViewById(R.id.txtSample)).getText().toString();
-                        //既可以使用Sql语句插入，也可以使用使用insert方法插入
-                        InsertUserSql(strWord, strMeaning, strSample);
+                        Cursor c = SearchUseSql(strWord);
+                        c.moveToFirst();
+                        if(c.getCount()>0) {
+                            Toast.makeText(MainActivity.this,"单词本中已存在该词，无法重复添加！", Toast.LENGTH_LONG).show();
+                        }else {
+                            //既可以使用Sql语句插入，也可以使用使用insert方法插入
+                            InsertUserSql(strWord, strMeaning, strSample);
+                            Toast.makeText(MainActivity.this,"新单词添加成功！", Toast.LENGTH_LONG).show();
+                        }
                        // LeftFragment leftFragment=new LeftFragment();
                         //leftFragment.add
                         //ArrayList<Map<String, String>> items = getAll();
@@ -157,8 +164,8 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         String sql = "select * from words where word ='" + strWordSearch +"'";
         Cursor c = db.rawQuery(sql);*/
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        String sql="select * from words where word = ? order by word desc";
-        Cursor c=db.rawQuery(sql,new String[]{"%"+strWordSearch+"%"});
+        String sql="select * from words where word = '"+strWordSearch+"' order by word desc";
+        Cursor c=db.rawQuery(sql,null/*new String[]{"'"+strWordSearch+"'"}*/);
         return c;
     }
 
