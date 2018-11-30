@@ -28,6 +28,7 @@ public class LeftFragment extends Fragment {
     private WordsAdapter adapter;
     //private boolean flagTwoPane;
    WordsDBHelper mDbHelper;
+   public View view;
 
 
 
@@ -45,7 +46,7 @@ public class LeftFragment extends Fragment {
 
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){//加载left_fragment布局进来
-        View view=inflater.inflate(R.layout.left_fragment,container,false);
+        view=inflater.inflate(R.layout.left_fragment,container,false);
         m_wordsRecycleView=(RecyclerView)view.findViewById(R.id.recyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
        // mDbHelper=new WordsDBHelper(view.getContext(), "Activity.mDbhelper", null, 1);
@@ -136,9 +137,31 @@ public class LeftFragment extends Fragment {
     }
 
     public void showWords(){
+       /* View view=inflater.inflate(R.layout.left_fragment,container,false);
+        m_wordsRecycleView=(RecyclerView)view.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        RightFragment wordsContentFragment=(RightFragment)getFragmentManager().findFragmentById(R.id.right_fragment);*/
+       /* TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.insert_layout, null);*/
+        wordList=getWords();
+       m_wordsRecycleView=(RecyclerView)view.findViewById(R.id.recyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(/*getActivity()*/view.getContext());
+        // mDbHelper=new WordsDBHelper(view.getContext(), "Activity.mDbhelper", null, 1);
+        m_wordsRecycleView.setLayoutManager(layoutManager);
+        adapter.setmOnItemClickLitner(new WordsAdapter.OnItemClickLitner() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Words words=wordList.get(position);
+
+                RightFragment wordsContentFragment=(RightFragment)getFragmentManager().findFragmentById(R.id.right_fragment);
+                wordsContentFragment.showWordContent(words.getWord(),words.getMeaning(),words.getSample());// wordsContentFragment.showWordContent("banana","香蕉","I love banana!");
+
+            }
+        });
+        //wordList=getWords();
+        adapter=new WordsAdapter((ArrayList<Words>)wordList);
+        m_wordsRecycleView.setAdapter(adapter);
 
     }
-
 
 
 

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +29,12 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity /*implements View.OnClickListener*/ {
     WordsDBHelper mDbHelper;
+    private RecyclerView m_wordsRecycleView;
+    private List<Words> wordList=new ArrayList<Words>();
+    private WordsAdapter adapter;
+    //private boolean flagTwoPane;
+
+    public View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,31 +68,56 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
+        //show();
         int id = item.getItemId();
         switch (id) {
             case R.id.action_search:
                 SearchDialog();
                 return true;
             case R.id.action_insert:
+                //show();
                 InsertDialog();
                 // LeftFragment leftFragment=(LeftFragment) getSupportFragmentManager().findFragmentById(R.id.left_fragment);
                 //replaceFragment(new LeftFragment());
-                LeftFragment leftfragment=(LeftFragment)getSupportFragmentManager().findFragmentById(R.id.left_fragment);
+               //show();
+                /*leftfragment.
+                leftfragment.showWords();*/
                // mDbHelper = new WordsDBHelper(this);
                 //replaceFragment(new LeftFragment());
-
-
                 //leftfragment.onAttach(this);
                 Toast.makeText(this, "you clicked the insert menu", Toast.LENGTH_LONG).show();
                 return true;
             case R.id.action_delete:
                 DeleteDialog();
+                //show();
                 return true;
             case R.id.action_modify:
                 UpdateDialog();
+                //show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void show(){
+
+        LeftFragment leftfragment=(LeftFragment)getSupportFragmentManager().findFragmentById(R.id.left_fragment);
+        m_wordsRecycleView=(RecyclerView)leftfragment.view.findViewById(R.id.recyclerView);
+        wordList=getWords();
+        adapter=new WordsAdapter((ArrayList<Words>)wordList);
+        adapter.setmOnItemClickLitner(new WordsAdapter.OnItemClickLitner() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Words words=wordList.get(position);
+
+                RightFragment wordsContentFragment=(RightFragment)getSupportFragmentManager().findFragmentById(R.id.right_fragment);
+                wordsContentFragment.showWordContent(words.getWord(),words.getMeaning(),words.getSample());// wordsContentFragment.showWordContent("banana","香蕉","I love banana!");
+
+            }
+        });
+
+        m_wordsRecycleView.setAdapter(adapter);
     }
 
     //使用Sql语句插入单词
@@ -117,6 +149,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             //既可以使用Sql语句插入，也可以使用使用insert方法插入
                             InsertUserSql(strWord, strMeaning, strSample);
                             Toast.makeText(MainActivity.this,"新单词添加成功！", Toast.LENGTH_LONG).show();
+                            show();
                         }
                        // LeftFragment leftFragment=new LeftFragment();
                         //leftFragment.add
@@ -248,6 +281,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         if(c.getCount()>0) {
                             DeleteUseSql(txtDeleteWord);
                             Toast.makeText(MainActivity.this,"删除成功！", Toast.LENGTH_LONG).show();
+                            show();
                         }
                         else{
                             Toast.makeText(MainActivity.this,"单词本中无该词，无法删除！", Toast.LENGTH_LONG).show();
@@ -295,6 +329,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                         if(c.getCount()>0) {
                             UpdateUseSql(strNewWord, strNewMeaning, strNewSample);
                             Toast.makeText(MainActivity.this,"修改成功！", Toast.LENGTH_LONG).show();
+                            show();
                         }else{
                             Toast.makeText(MainActivity.this,"单词本中不存在该词，请先添加才能进行修改！", Toast.LENGTH_LONG).show();
                         }
@@ -324,20 +359,25 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
         mDbHelper.close();
     }
 
-    /*private List<Words> getWords() {
+    private List<Words> getWords() {
+       /* mDbHelper.close();*/
+
+        mDbHelper = new WordsDBHelper(this);
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String sql="select * from words";
         Cursor c=db.rawQuery(sql,null);
-        List<Words> words=null;
-        Words word=new Words();
-        while(c.moveToNext()){
+        List<Words> words=new ArrayList<Words>();
+        c.moveToFirst();
+        for(int i=0;i<c.getCount();i++){/* while(c.moveToNext()){*/
+            Words word=new Words();
             word.setWord(c.getString(0));
             word.setMeaning(c.getString(1));
             word.setSample(c.getString(2));
             words.add(word);
+            c.moveToNext();
         }
         return words;
-    }*/
+    }
 
 
    /* public List<Words> getWords() {
