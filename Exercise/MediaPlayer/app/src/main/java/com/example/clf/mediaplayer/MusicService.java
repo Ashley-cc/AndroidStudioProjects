@@ -23,6 +23,7 @@ public class MusicService extends Service{
     public static final int COMMAND_PREVIOUS=4;
     public static final int COMMAND_NEXT=5;
     public static final int COMMAND_CHECK_IS_PLAYING=6;
+    public static final int COMMAND_SEEK_TO=7;
     //播放状态
     public static final int STATUS_PLAYING=0;
     public static final int STATUS_PAUSED=1;
@@ -152,6 +153,12 @@ public class MusicService extends Service{
         player.start();
         sendBroadcastOnStatusChanged(MusicService.STATUS_PLAYING);
     }
+   //跳转至播放的位置
+    private void seekTo(int time){
+        if(player!=null){
+            player.seekTo(time);
+        }
+    }
 
    class CommandReceiver extends BroadcastReceiver{
         public void onReceive(Context context,Intent intent){
@@ -162,6 +169,9 @@ public class MusicService extends Service{
             int command = intent.getIntExtra("command",COMMAND_UNKNOWN);
             //执行命令
             switch (command){
+                case COMMAND_SEEK_TO:
+                    seekTo(intent.getIntExtra("time",0));
+                    break;
                 case COMMAND_PLAY:
                 case COMMAND_PREVIOUS:
                 case COMMAND_NEXT:
@@ -203,6 +213,10 @@ public class MusicService extends Service{
    private void sendBroadcastOnStatusChanged(int status){
         Intent intent=new Intent(BROADCAST_MUSICSERVICE_UPDATE_STATUS);
        intent.putExtra("status",status);
+       if(status==STATUS_PLAYING){
+           intent.putExtra("time",player.getCurrentPosition());
+           intent.putExtra("duration",player.getDuration());
+       }
        sendBroadcast(intent);
    }
 

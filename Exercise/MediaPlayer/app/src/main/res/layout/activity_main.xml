@@ -12,10 +12,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView1"
         android:layout_alignParentTop="true"></ListView>
+
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dip"
         android:id="@+id/linearLayout1"
+        android:layout_alignParentBottom="true">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout2"
         android:layout_alignParentBottom="true"
         android:gravity="center">
         <Button
@@ -38,6 +46,30 @@
             android:layout_height="wrap_content"
             android:id="@+id/next"
             android:text="下一首"/>
+    </LinearLayout>
+        <SeekBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBar1"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"/>
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/relativeLayout1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView1"
+                android:text="00:00"
+                android:layout_alignParentLeft="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2"
+                android:layout_alignParentRight="true"
+                android:text="00:00"/>
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>
 

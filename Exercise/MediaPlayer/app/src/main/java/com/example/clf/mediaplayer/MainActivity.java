@@ -13,6 +13,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -28,6 +29,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.SeekBar;
+import android.os.Handler;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -40,25 +44,43 @@ public class MainActivity extends AppCompatActivity {
     private Button btn_next;
     private Button btn_stop;
     private ListView list;
+    private TextView text_Current;
+    private TextView text_Duration;
+    private SeekBar seekBar;
+
+    private Handler seekBarHandler;//更新进度条的Handler
+    private int duration;//当前歌曲的持续时间和当前位置，作用于进度条
+    private int time;
+
+    //进度条控制常量
+    private static final int PROCESS_INCREASE = 0;
+    private static final int PROCESS_PAUSE = 1;
+    private static final int PROCESS_RESET = 2;
 
     private Cursor cursor;
-    private String path;
+    // private String path;
     private int status;
     private int number;//当前歌曲的序号，下标从1开始
     private StatusChangedReceiver receiver;
 
-    private static final int REQUEST_PERMISSION = 0;
+    public MainActivity() {
+    }
+
+    //private static final int REQUEST_PERMISSION = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViews();
         registerListeners();
-        number=1;
-        status=MusicService.STATUS_STOPPED;
-        startService(new Intent(this,MusicService.class));
+        number = 2;
+        status = MusicService.STATUS_STOPPED;
+        duration = 0;
+        time = 0;
+        startService(new Intent(this, MusicService.class));
         bindStatusChangedReceiver();
         sendBroadcastOnCommand(MusicService.COMMAND_CHECK_IS_PLAYING);
+        initSeekBarHandler();
 
         /*if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
@@ -67,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"列表初始化...",Toast.LENGTH_LONG).show();
         }*/
     }
+
+
+
 
  /*   @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -100,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
         btn_next=(Button)findViewById(R.id.next);
         btn_stop=(Button)findViewById(R.id.stop);
         list=(ListView)findViewById(R.id.listView1);
+        seekBar=(SeekBar)findViewById(R.id.seekBar1);
+        text_Current=(TextView)findViewById(R.id.textView1);
+        text_Duration=(TextView)findViewById(R.id.textView2);
     }
     //为显示组件注册监听器
     private void registerListeners(){
@@ -162,6 +190,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        seekBar.setOnSeekBarChangeListener(new  SeekBar.OnSeekBarChangeListener() {
+            public void onStopTrackingTouch (SeekBar seekBar){
+                 //发送广播给MusicService，执行跳转
+                sendBroadcastOnCommand(MusicService.COMMAND_SEEK_TO);
+                if(isPlaying()){
+                    //进度条恢复移动
+                    seekBarHandler.sendEmptyMessageDelayed(PROCESS_INCREASE,1000);
+                }
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                //更新文本
+                time=progress;
+                text_Current.setText(formatTime(time));
+            }
+
+            public void onStartTrackingTouch (SeekBar seekBar){
+                //进度条暂停移动
+                seekBarHandler.sendEmptyMessage(PROCESS_PAUSE);
+            }
+
+        });
+
+
     }
 
     protected void onResume() {
@@ -192,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
     private void initMusicList(){
 
         Cursor cursor= getMusicCursor();
-        path=getPath(1);
+        //path=getPath(1);
        // cursor.moveToFirst();
         //getPath(0);
         setListContent(cursor);
@@ -277,6 +330,9 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("path",getPath(number));
                 //intent.putExtra("path",path);
                 break;
+                case MusicService.COMMAND_SEEK_TO:
+                    intent.putExtra("time",time);
+                    break;
             case MusicService.COMMAND_PAUSE:
             case MusicService.COMMAND_STOP:
             case MusicService.COMMAND_RESUME:
@@ -313,9 +369,29 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             status=intent.getIntExtra("status",-1);
-            if(status==MusicService.STATUS_COMPLETED){
-                sendBroadcastOnCommand(MusicService.COMMAND_NEXT);
+            switch (status){
+                case MusicService.STATUS_PLAYING:
+                    time=intent.getIntExtra("time",0);
+                    duration=intent.getIntExtra("duration",0);
+                    seekBarHandler.removeMessages(PROCESS_INCREASE);
+                    seekBarHandler.sendEmptyMessageDelayed(PROCESS_INCREASE,1000);
+                    seekBar.setMax(duration);
+                    seekBar.setProgress(time);
+                    text_Current.setText(formatTime(duration));
+                case MusicService.STATUS_PAUSED:
+                    seekBarHandler.sendEmptyMessage(PROCESS_PAUSE);
+                case MusicService.STATUS_STOPPED:
+                    seekBarHandler.sendEmptyMessage(PROCESS_RESET);
+                    break;
+                case MusicService.STATUS_COMPLETED:
+                    sendBroadcastOnCommand(MusicService.COMMAND_NEXT);
+                    seekBarHandler.sendEmptyMessage(PROCESS_RESET);
+                    break;
+                    default:
+                        break;
+
             }
+
             //updateUI(status);
         }
 
@@ -325,6 +401,53 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }*/
+    }
+
+    //格式化：毫秒“mm:ss”
+    private String formatTime(int msec){
+        int minute=(msec/1000)/60;
+        int second=(msec/1000)%60;
+        String minuteString;
+        String secondString;
+        if(minute<10){
+            minuteString="0"+minute;
+        }else{
+            minuteString=""+minute;
+        }
+
+        if(second<10){
+            secondString="0"+second;
+        }else{
+            secondString=""+second;
+        }
+        return minuteString+":"+secondString;
+    }
+
+    private void initSeekBarHandler(){
+        seekBarHandler=new Handler(){
+            public void handleMessage(Message msg){
+                super.handleMessage(msg);
+
+                switch(msg.what){
+                    case PROCESS_INCREASE:
+                        if(seekBar.getProgress()<duration){
+                            //进度条前进一秒
+                            seekBar.incrementProgressBy(1000);
+                            seekBarHandler.sendEmptyMessageDelayed(PROCESS_INCREASE,1000);//1000毫秒之后执行这一动作
+                            //修改显示当前进度的文本
+                            text_Current.setText(formatTime(time));
+                            time=time+1000;
+                        }break;
+                    case PROCESS_PAUSE:
+                        seekBarHandler.removeMessages(PROCESS_INCREASE);break;
+                    case PROCESS_RESET:
+                        //重置进度条界面
+                        seekBarHandler.removeMessages(PROCESS_INCREASE);
+                        seekBar.setProgress(0);
+                        text_Current.setText("00:00");break;
+                }
+            }
+        };
     }
 
 }
