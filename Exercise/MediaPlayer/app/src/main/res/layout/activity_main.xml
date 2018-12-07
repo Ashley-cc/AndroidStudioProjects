@@ -5,6 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
+    android:id="@+id/Back"
     tools:context=".MainActivity">
 
     <ListView
@@ -29,7 +30,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/previus"
+            android:id="@+id/previous"
             android:text="上一首"/>
         <Button
             android:layout_width="wrap_content"
@@ -41,11 +42,13 @@
             android:layout_height="wrap_content"
             android:id="@+id/stop"
             android:text="重新播放"/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/next"
             android:text="下一首"/>
+
     </LinearLayout>
         <SeekBar
             android:layout_width="fill_parent"
@@ -73,7 +76,11 @@
     </LinearLayout>
 </RelativeLayout>
 
-
+<!--<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/loop"
+android:text="单曲循环"/>-->
 <!--android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
 </android.support.constraint.ConstraintLayout>-->

@@ -1,48 +1,38 @@
 package com.example.clf.mediaplayer;
 
-import android.Manifest;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SeekBar;
-import android.os.Handler;
-
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private RelativeLayout Back;
     private Button btn_previous;
     private Button btn_play;
     private Button btn_next;
     private Button btn_stop;
+    //private Button btn_loop;
     private ListView list;
     private TextView text_Current;
     private TextView text_Duration;
@@ -63,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     private int number;//当前歌曲的序号，下标从1开始
     private StatusChangedReceiver receiver;
 
+    //boolean loop=false;
+
     public MainActivity() {
     }
 
@@ -73,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         findViews();
         registerListeners();
-        number = 2;
+        number = 1;
         status = MusicService.STATUS_STOPPED;
         duration = 0;
         time = 0;
@@ -81,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         bindStatusChangedReceiver();
         sendBroadcastOnCommand(MusicService.COMMAND_CHECK_IS_PLAYING);
         initSeekBarHandler();
+        Back.setBackgroundResource(R.drawable.back1);
 
         /*if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
@@ -120,10 +113,12 @@ public class MainActivity extends AppCompatActivity {
 
    //获取显示组件
     private void findViews(){
-        btn_previous=(Button)findViewById(R.id.previus);
+        Back=(RelativeLayout) findViewById(R.id.Back);
+        btn_previous=(Button)findViewById(R.id.previous);
         btn_play=(Button)findViewById(R.id.play);
         btn_next=(Button)findViewById(R.id.next);
         btn_stop=(Button)findViewById(R.id.stop);
+        //btn_loop=(Button)findViewById(R.id.loop);
         list=(ListView)findViewById(R.id.listView1);
         seekBar=(SeekBar)findViewById(R.id.seekBar1);
         text_Current=(TextView)findViewById(R.id.textView1);
@@ -176,12 +171,19 @@ public class MainActivity extends AppCompatActivity {
                // stop();
             }
         });
+        /*btn_loop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendBroadcastOnCommand(MusicService.COMMAND_LOOP);
+                // stop();
+            }
+        });*/
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                number=position+2;
-                TextView textView=view.findViewById(android.R.id.text1);
+                number=position+1;
+               // TextView textView=view.findViewById(android.R.id.text1);
                 //path=  textView.getText().toString();
                 //Log.v("abc",path);
                 sendBroadcastOnCommand(MusicService.COMMAND_PLAY);
@@ -262,10 +264,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getPath(int number){
-        cursor.moveToFirst();
+        cursor.moveToPosition(number-1);
+       /* cursor.moveToFirst();
         for(int i=0;i<number-1;i++) {
             cursor.moveToNext();
-        }
+        }*/
         return cursor.getString(1);
       //  Log.v("testpath", cursor.getString(1));
         //return cursor.getString(0);
@@ -290,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
             number=1;
             Toast.makeText(this,"已到达列表底端",Toast.LENGTH_LONG).show();
         }else{
-            number++;
+            ++number;
         }
     }
 
@@ -299,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
             number=list.getCount();
             Toast.makeText(this,"已到达列表顶端",Toast.LENGTH_LONG).show();
         }else{
-            number--;
+            --number;
         }
     }
 
@@ -312,11 +315,13 @@ public class MainActivity extends AppCompatActivity {
 
         //根据不同的命令，封装不同的数据
         switch(command){
+
             case MusicService.COMMAND_PLAY:
                 intent.putExtra("number",number);
                 //intent.putExtra("test",getPath(number));
                 //intent.putExtra("test",getPath(number));
                 intent.putExtra("path",getPath(number));
+                break;
             case MusicService.COMMAND_PREVIOUS:
                 moveNumberToPrevious();
                 //intent.putExtra("path",path);
@@ -333,9 +338,12 @@ public class MainActivity extends AppCompatActivity {
                 case MusicService.COMMAND_SEEK_TO:
                     intent.putExtra("time",time);
                     break;
+            case MusicService.COMMAND_LOOP:
+                /*intent.putExtra("loop",true);*/
             case MusicService.COMMAND_PAUSE:
             case MusicService.COMMAND_STOP:
             case MusicService.COMMAND_RESUME:
+
             default:
                 break;
         }
@@ -377,9 +385,16 @@ public class MainActivity extends AppCompatActivity {
                     seekBarHandler.sendEmptyMessageDelayed(PROCESS_INCREASE,1000);
                     seekBar.setMax(duration);
                     seekBar.setProgress(time);
-                    text_Current.setText(formatTime(duration));
+                    text_Duration.setText(formatTime(duration));
+                    //设置Activity标题栏文字，提示正在播放的歌曲
+                    Cursor cursor=getMusicCursor();
+                    cursor.moveToPosition(number-1);
+                    String title=cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE));
+                    setTitle("正在播放:"+title+"-MediaPlayer");
+                    break;
                 case MusicService.STATUS_PAUSED:
                     seekBarHandler.sendEmptyMessage(PROCESS_PAUSE);
+                    break;
                 case MusicService.STATUS_STOPPED:
                     seekBarHandler.sendEmptyMessage(PROCESS_RESET);
                     break;
@@ -387,6 +402,25 @@ public class MainActivity extends AppCompatActivity {
                     sendBroadcastOnCommand(MusicService.COMMAND_NEXT);
                     seekBarHandler.sendEmptyMessage(PROCESS_RESET);
                     break;
+                    /*if(status==MusicService.STATUS_LOOP){
+                        sendBroadcastOnCommand(MusicService.COMMAND_PREVIOUS);
+                    }*/
+                   /* if(status==MusicService.STATUS_LOOP){
+                        moveNumberToPrevious();
+                    }*/
+
+
+               /* case MusicService.STATUS_LOOP:
+                    seekBarHandler.sendEmptyMessage(PROCESS_RESET);
+                    //sendBroadcastOnCommand(MusicService.COMMAND_LOOP);
+                    break;*/
+                   /* time=intent.getIntExtra("time",0);
+                    duration=intent.getIntExtra("duration",0);
+                    seekBarHandler.removeMessages(PROCESS_INCREASE);
+                    seekBarHandler.sendEmptyMessageDelayed(PROCESS_INCREASE,1000);
+                    seekBar.setMax(duration);
+                    seekBar.setProgress(time);B
+                    text_Duration.setText(formatTime(duration));break;*/
                     default:
                         break;
 
@@ -449,6 +483,57 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.loop:
+                sendBroadcastOnCommand(MusicService.COMMAND_LOOP);
+                break;
+            case R.id.unloop:
+                sendBroadcastOnCommand(MusicService.COMMAND_UNLOOP);
+                break;
+            case R.id.theme:
+                new AlertDialog.Builder(this)
+                        .setTitle("请选择主题")
+                        .setItems(R.array.theme, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String[] themes=MainActivity.this.getResources().getStringArray(R.array.theme);
+                                setTheme(themes[which]);
+                            }
+                        }).show();
+                break;
+            case R.id.about:
+                new AlertDialog.Builder(this)
+                        .setTitle("MediaPlayer")
+                        .setMessage(this.getString(R.string.about)).show();
+                break;
+                default:
+                    break;
+        }
+        return true;
+    }
+
+    private void setTheme(String theme){
+        if("花瓣".equals(theme)){
+            Back.setBackgroundResource(R.drawable.back1);
+        }else if("欢庆".equals(theme)){
+            Back.setBackgroundResource(R.drawable.back2);
+        }else if("动漫".equals(theme)){
+            Back.setBackgroundResource(R.drawable.back3);
+        }
+    }
+
+   /* private void setTheme(){
+        root_Layout.setB
+    }*/
+
+
 
 }
 

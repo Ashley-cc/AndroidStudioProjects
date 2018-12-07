@@ -24,11 +24,14 @@ public class MusicService extends Service{
     public static final int COMMAND_NEXT=5;
     public static final int COMMAND_CHECK_IS_PLAYING=6;
     public static final int COMMAND_SEEK_TO=7;
+    public static final int COMMAND_LOOP=8;
+    public static final int COMMAND_UNLOOP=9;
     //播放状态
     public static final int STATUS_PLAYING=0;
     public static final int STATUS_PAUSED=1;
     public static final int STATUS_STOPPED=2;
     public static final int STATUS_COMPLETED=3;
+    public static final int STATUS_LOOP=4;
     //广播标识
     public static final String BROADCAST_MUSICSERVICE_CONTROL="MusicService.ACTION_CONTROL";
     public static final String BROADCAST_MUSICSERVICE_UPDATE_STATUS="MusicService.ACTION_UPDATE";
@@ -113,10 +116,15 @@ public class MusicService extends Service{
     MediaPlayer.OnCompletionListener completionListener = new MediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(MediaPlayer mp) {
-            if(mp.isLooping()){
+            if(mp.isLooping()||loop==true){
+
+                Log.v("abc","循环");
+                //sendBroadcastOnStatusChanged(MusicService.STATUS_LOOP);
                 replay();
             }else{
+                Log.v("abc","播放完成");
                 sendBroadcastOnStatusChanged(MusicService.STATUS_COMPLETED);
+
             }
         }
     };
@@ -151,7 +159,17 @@ public class MusicService extends Service{
 //重新播放
     private void replay(){
         player.start();
+        //sendBroadcastOnStatusChanged(MusicService.STATUS_STOPPED);
         sendBroadcastOnStatusChanged(MusicService.STATUS_PLAYING);
+    }
+
+    private void loop(){
+        player.setLooping(true);
+        //sendBroadcastOnStatusChanged(MusicService.STATUS_LOOP);
+    }
+    private void unloop(){
+        player.setLooping(false);
+        //sendBroadcastOnStatusChanged(MusicService.STATUS_LOOP);
     }
    //跳转至播放的位置
     private void seekTo(int time){
@@ -159,7 +177,7 @@ public class MusicService extends Service{
             player.seekTo(time);
         }
     }
-
+boolean loop=false;
    class CommandReceiver extends BroadcastReceiver{
         public void onReceive(Context context,Intent intent){
             //unregisterReceiver(this);
@@ -191,7 +209,19 @@ public class MusicService extends Service{
                 case COMMAND_RESUME:
                     resume();
                     break;
-
+                case COMMAND_LOOP:
+                   /* int number = intent.getIntExtra("number",1);
+                    path = intent.getStringExtra("path");
+                    //test=intent.getStringExtra("test");
+                    // Log.v("service test","11"+test);
+                    Toast.makeText(MusicService.this,"正在播放第"+number+"首",Toast.LENGTH_LONG).show();
+                    play(number);*/
+                    loop=true;
+                    break;
+                case COMMAND_UNLOOP:
+                    loop=false;
+                    //unloop();
+                    break;
                 case COMMAND_CHECK_IS_PLAYING:
                     if(player.isPlaying()){
                         sendBroadcastOnStatusChanged(MusicService.STATUS_PLAYING);
@@ -212,12 +242,12 @@ public class MusicService extends Service{
 
    private void sendBroadcastOnStatusChanged(int status){
         Intent intent=new Intent(BROADCAST_MUSICSERVICE_UPDATE_STATUS);
-       intent.putExtra("status",status);
-       if(status==STATUS_PLAYING){
-           intent.putExtra("time",player.getCurrentPosition());
-           intent.putExtra("duration",player.getDuration());
-       }
-       sendBroadcast(intent);
-   }
+        intent.putExtra("status",status);
+        if(status==STATUS_PLAYING){
+            intent.putExtra("time",player.getCurrentPosition());
+            intent.putExtra("duration",player.getDuration());
+        }
+        sendBroadcast(intent);
+    }
 
 }
