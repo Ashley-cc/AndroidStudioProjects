@@ -26,6 +26,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity {
     private RelativeLayout Back;
     private Button btn_previous;
@@ -38,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView text_Duration;
     private SeekBar seekBar;
 
+
+  boolean random=false;
     private Handler seekBarHandler;//更新进度条的Handler
     private int duration;//当前歌曲的持续时间和当前位置，作用于进度条
     private int time;
@@ -330,15 +334,29 @@ public class MainActivity extends AppCompatActivity {
                // intent.putExtra("path",path);
                 break;
             case MusicService.COMMAND_NEXT:
-                moveNumberToNext();
-                intent.putExtra("number",number);
-                intent.putExtra("path",getPath(number));
+                //moveNumberToNext();
+
+                if(random==true){
+                    number=new Random().nextInt(7)+1;
+                    /*intent.putExtra("number",new Random().nextInt(7)+1);
+                    Log.v("abc","数字"+number);
+                    Log.v("abc","random"+random);*/
+                }
+                else {
+                    moveNumberToNext();
+                }
+                intent.putExtra("number", number);
+                intent.putExtra("path", getPath(number));
                 //intent.putExtra("path",path);
                 break;
                 case MusicService.COMMAND_SEEK_TO:
                     intent.putExtra("time",time);
                     break;
-            case MusicService.COMMAND_LOOP:
+           /* case MusicService.COMMAND_RANDOM:
+                random=true;
+                    break;*/
+           /* case MusicService.COMMAND_LOOP:
+            case MusicService.COMMAND_UNLOOP:*/
                 /*intent.putExtra("loop",true);*/
             case MusicService.COMMAND_PAUSE:
             case MusicService.COMMAND_STOP:
@@ -493,9 +511,15 @@ public class MainActivity extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.loop:
                 sendBroadcastOnCommand(MusicService.COMMAND_LOOP);
+                random=false;
                 break;
             case R.id.unloop:
                 sendBroadcastOnCommand(MusicService.COMMAND_UNLOOP);
+                random=false;
+                break;
+            case R.id.random:
+                random=true;
+                sendBroadcastOnCommand(MusicService.COMMAND_RANDOM);
                 break;
             case R.id.theme:
                 new AlertDialog.Builder(this)
@@ -526,6 +550,8 @@ public class MainActivity extends AppCompatActivity {
             Back.setBackgroundResource(R.drawable.back2);
         }else if("动漫".equals(theme)){
             Back.setBackgroundResource(R.drawable.back3);
+        }else if("蓝色小熊".equals(theme)){
+            Back.setBackgroundResource(R.drawable.back4);
         }
     }
 

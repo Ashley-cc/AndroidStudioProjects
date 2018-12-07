@@ -7,8 +7,11 @@
         android:id="@+id/loop"
         android:title="单曲循环"/>
     <item
+        android:id="@+id/random"
+        android:title="随机播放"/>
+    <item
         android:id="@+id/theme"
-        android:title="主题"/>
+        android:title="皮肤"/>
     <item
         android:id="@+id/about"
         android:title="关于"/>

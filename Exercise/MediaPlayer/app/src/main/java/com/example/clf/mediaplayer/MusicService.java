@@ -26,6 +26,7 @@ public class MusicService extends Service{
     public static final int COMMAND_SEEK_TO=7;
     public static final int COMMAND_LOOP=8;
     public static final int COMMAND_UNLOOP=9;
+    public static final int COMMAND_RANDOM=10;
     //播放状态
     public static final int STATUS_PLAYING=0;
     public static final int STATUS_PAUSED=1;
@@ -121,7 +122,8 @@ public class MusicService extends Service{
                 Log.v("abc","循环");
                 //sendBroadcastOnStatusChanged(MusicService.STATUS_LOOP);
                 replay();
-            }else{
+            }
+            else {
                 Log.v("abc","播放完成");
                 sendBroadcastOnStatusChanged(MusicService.STATUS_COMPLETED);
 
@@ -178,6 +180,7 @@ public class MusicService extends Service{
         }
     }
 boolean loop=false;
+ /*boolean random=false;*/
    class CommandReceiver extends BroadcastReceiver{
         public void onReceive(Context context,Intent intent){
             //unregisterReceiver(this);
@@ -221,6 +224,12 @@ boolean loop=false;
                 case COMMAND_UNLOOP:
                     loop=false;
                     //unloop();
+                    break;
+              /*  case COMMAND_RANDOM:
+                    random=true;
+                    break;*/
+                case COMMAND_RANDOM:
+                    loop=false;
                     break;
                 case COMMAND_CHECK_IS_PLAYING:
                     if(player.isPlaying()){

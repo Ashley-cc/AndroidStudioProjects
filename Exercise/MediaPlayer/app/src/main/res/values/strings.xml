@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">MediaPlayer</string>
-    <string name="about">这是一个简单的音乐播放器</string>
+    <string name="about">这是一个简单的音乐播放器MediaPlayer,播放方式有顺序播放、单曲循环，还可更换皮肤；可拖动进度条改变播放进度。</string>
 </resources>
