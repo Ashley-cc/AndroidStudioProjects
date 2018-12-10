@@ -20,13 +20,14 @@
         <EditText
             android:layout_width="185dp"
             android:layout_height="wrap_content"
-            android:text="guangzhou"
+            android:hint="省/市名称的拼音"
             android:id="@+id/value" />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="查询"
-            android:id="@+id/find"/>
+            android:id="@+id/find"
+            android:textColor="@color/colorPrimaryDark"/>
     </LinearLayout>
 <LinearLayout
     android:layout_width="fill_parent"
