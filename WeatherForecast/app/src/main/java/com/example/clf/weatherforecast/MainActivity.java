@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Xml;
 import android.view.View;
 import android.widget.Button;
@@ -26,9 +27,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity implements Runnable,View.OnClickListener{
+   /* Date curDate=new Date(System.currentTimeMillis());
+    String str=format.format(curDate);*/
     HttpURLConnection httpConn=null;
     InputStream din=null;
     Vector<String> cityname=new Vector<String>();
@@ -44,21 +51,24 @@ public class MainActivity extends AppCompatActivity implements Runnable,View.OnC
     Vector<String> time=new Vector<String>();
     Vector<String> temNow=new Vector<String>();
 
-    int weatherIndex[] =new int[20];
+    //int weatherIndex[] =new int[20];
     String city="guangzhou";
-    boolean bPress=false;
-    boolean bHasData=false;
+    //boolean bPress=false;
+    //boolean bHasData=false;
     LinearLayout body;
     FrameLayout main;
     Button find;
     EditText value;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        setTitle("天气实况查询");
+
+        //setTitle("天气实况查询");
         findViews();
         find.setOnClickListener(this);
         main.setBackgroundResource(R.drawable.back3);
@@ -87,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,View.OnC
         cityname.removeAllElements();
         low.removeAllElements();
         high.removeAllElements();
-        icon.removeAllElements();
+        //icon.removeAllElements();
         bitmap.removeAllElements();
         summary.removeAllElements();
         parseData();
