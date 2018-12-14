@@ -1,6 +1,8 @@
 package com.example.clf.weatherforecast;
 
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,8 @@ import java.util.TimeZone;
 import java.util.Vector;
 
 public class FutureWeather extends AppCompatActivity implements Runnable,View.OnClickListener{
+    final static int Night2=10;
+    final static int Night1=6;
     LinearLayout body;
     FrameLayout main;
     Button find;
@@ -43,6 +48,9 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
     Vector<String> tem=new Vector<String>();//温度（高温/低温）
     Vector<String> weather=new Vector<String>();//天气情况
     Vector<String> icon=new Vector<String>();//天气图标
+    Vector<String> icon1=new Vector<String>();//晚间天气图标
+
+    Vector<Bitmap> bitmap=new Vector<Bitmap>();
     Vector<String> wind=new Vector<String>();//风向
     Vector<String> winp=new Vector<String>();//风力
     Vector<String> tem_high=new Vector<String>();//最高温
@@ -51,6 +59,7 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
 
     Calendar cal;
     String hour;
+    int time;
     /*String days;
     String week;
     String citynm;
@@ -84,7 +93,7 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
         wind.removeAllElements();
         winp.removeAllElements();
         parseData();
-        //downImage();
+        downImage();
         Message message=new Message();
         message.what=1;
 
@@ -108,13 +117,16 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
         setContentView(R.layout.future_main);
         findViews();
         find.setOnClickListener(this);
-        main.setBackgroundResource(R.drawable.back3);
+        main.setBackgroundResource(R.drawable.back7);
         cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
         if (cal.get(Calendar.AM_PM) == 0)
             hour = String.valueOf(cal.get(Calendar.HOUR));
         else
             hour = String.valueOf(cal.get(Calendar.HOUR)+12);
+
+        time=Integer.parseInt(hour);
+        Log.v("abc",""+time);
 
         Log.v("abc",hour);
     }
@@ -208,6 +220,10 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
                         }
                         else if ("winp".equals(nodeName)) {
                             winp.addElement("风力："+xmlParser.nextText());
+                        }else if("weather_icon".equals(nodeName)){
+                            icon.addElement(xmlParser.nextText());
+                        }else if("weather_icon1".equals(nodeName)){
+                            icon1.addElement(xmlParser.nextText());
                         }
                         break;
                     }
@@ -255,11 +271,13 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
             TextView cityView = new TextView(this);
             cityView.setLayoutParams(params);
             cityView.setText(city);
+            cityView.setTextSize(20);
             cityView.setTextColor(getResources().getColor(R.color.colorAccent));
             body.addView(cityView);
             for(int i=0;i<days.size();i++) {
                 LinearLayout linearLayout=new LinearLayout(this);
                 LinearLayout Date = new LinearLayout(this);
+                LinearLayout Weather = new LinearLayout(this);
 
                 /*LinearLayout Weather = new LinearLayout(this);*/
                 //LinearLayout Tem=new LinearLayout(this);
@@ -267,6 +285,8 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
                 //Tem.setOrientation(LinearLayout.HORIZONTAL);
                 Wind.setOrientation(LinearLayout.HORIZONTAL);
                 Date.setOrientation(LinearLayout.HORIZONTAL);
+                Weather.setOrientation(LinearLayout.HORIZONTAL);
+
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 //linearlayout.setBackgroundResource(R.drawable.back2);
                 //linearlayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -294,20 +314,23 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
                 linearLayout.addView(Date);
                 //Weather.addView(summaryView);
                 //图标
-        /*   ImageView iconView=new ImageView(this);
+           ImageView iconView=new ImageView(this);
            iconView.setLayoutParams(params);
            iconView.setImageBitmap(bitmap.elementAt(i));
-           linearlayout.addView(iconView);*/
+           Weather.addView(iconView);
+
+                //天气
+                TextView weatherView = new TextView(this);
+                weatherView.setLayoutParams(params);
+                weatherView.setText(weather.elementAt(i));
+                Weather.addView(weatherView);
+                linearLayout.addView(Weather);
                 //温度
                 TextView temView = new TextView(this);
                 temView.setLayoutParams(params);
                 temView.setText(tem.elementAt(i));
                 linearLayout.addView(temView);
-                //天气
-                TextView highView = new TextView(this);
-                highView.setLayoutParams(params);
-                highView.setText(weather.elementAt(i));
-                linearLayout.addView(highView);
+
                 //风向
                 TextView windView = new TextView(this);
                 windView.setLayoutParams(params);
@@ -326,6 +349,42 @@ public class FutureWeather extends AppCompatActivity implements Runnable,View.On
         }
     }
 
+//下载图片
+    private void downImage(){
+        int i=0;
+        for(i=0;i<icon.size();i++){
+            try {
+                URL url;
+                if(nightOrDay()) {
+                    url = new URL(icon1.elementAt(i));
+                }else{
+                    url = new URL(icon.elementAt(i));
+                }
+                httpConn=(HttpURLConnection)url.openConnection();
+                httpConn.setRequestMethod("GET");
+                din=httpConn.getInputStream();
+                //Bitmap图片数据
+                bitmap.addElement(BitmapFactory.decodeStream(httpConn.getInputStream()));
+            }catch(Exception e){
+                e.printStackTrace();
+            }finally{
+                try{
+                    din.close();
+                    httpConn.disconnect();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+//判断是否为夜晚
+    private boolean nightOrDay(){
+        if(time>Night1&&time<Night2){
+            return false;
+        }
+            return true;
+    }
 
-    
+
+
 }

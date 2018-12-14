@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,View.OnC
                             high.addElement("最高："+xmlParser.getAttributeValue(null,"tem1"));
                             windDir.addElement("风向： "+xmlParser.getAttributeValue(null,"windDir"));
                             windPower.addElement("风力： "+xmlParser.getAttributeValue(null,"windPower"));
-                            windState.addElement("风级： "+xmlParser.getAttributeValue(null,"windState"));
+                            windState.addElement("当前风的状况： "+xmlParser.getAttributeValue(null,"windState"));
                             humidity.addElement("湿度： "+xmlParser.getAttributeValue(null,"humidity"));
                             time.addElement("更新时间： "+xmlParser.getAttributeValue(null,"time"));
                             temNow.addElement("当前温度： "+xmlParser.getAttributeValue(null,"temNow"));
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,View.OnC
         body.setOrientation(LinearLayout.VERTICAL);
        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
        params.weight=80;
-       params.height=50;
+       params.height=60;
        if(cityname.size()==0){
            new AlertDialog.Builder(this)
                    .setTitle("错误页面")//标题
@@ -258,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements Runnable,View.OnC
            cityView.setLayoutParams(params);
            cityView.setText(cityname.elementAt(i));
            cityView.setTextColor(getResources().getColor(R.color.colorAccent));
+           cityView.setTextSize(20);
            City.addView(cityView);
 
            //更新时间
@@ -308,13 +309,13 @@ public class MainActivity extends AppCompatActivity implements Runnable,View.OnC
            windPowerView.setLayoutParams(params);
            windPowerView.setText(windPower.elementAt(i));
            Wind.addView(windPowerView);
-
-           //风级
+           body.addView(Wind);
+           //当前风的状况
            TextView windStateView = new TextView(this);
            windStateView.setLayoutParams(params);
            windStateView.setText(windState.elementAt(i));
-           Wind.addView(windStateView);
-           body.addView(Wind);
+           body.addView(windStateView);
+
            //湿度
            TextView humidityView = new TextView(this);
            humidityView.setLayoutParams(params);
