@@ -33,7 +33,7 @@ import java.util.TimeZone;
 import java.util.Vector;
 
 public class FutureWeather extends AppCompatActivity implements Runnable,View.OnClickListener{
-    final static int Night2=10;
+    final static int Night2=18;
     final static int Night1=6;
     LinearLayout body;
     FrameLayout main;
