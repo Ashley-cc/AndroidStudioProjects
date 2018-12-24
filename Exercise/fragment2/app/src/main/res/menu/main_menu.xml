@@ -15,5 +15,8 @@
     <item
         android:id="@+id/action_modify"
         android:title="修改"/>
+    <item
+        android:id="@+id/Search_online"
+        android:title="在线查词"/>
 
 </menu>

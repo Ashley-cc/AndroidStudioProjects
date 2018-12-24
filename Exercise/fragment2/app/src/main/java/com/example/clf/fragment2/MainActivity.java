@@ -33,8 +33,9 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
     private List<Words> wordList=new ArrayList<Words>();
     private WordsAdapter adapter;
     //private boolean flagTwoPane;
-
+    public String searchWord;
     public View view;
+    private boolean find=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,12 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 UpdateDialog();
                 //show();
                 return true;
+            case R.id.Search_online:
+                Intent intent = new Intent(this, WebSearch.class);
+                //intent.putExtra("searchWord",searchWord);
+                startActivity(intent);
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -205,6 +212,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
 
    //查询对话框
     private void SearchDialog() {
+         //boolean find=true;
         final TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.search, null);
         new AlertDialog.Builder(this)
                 .setTitle("查找单词")//标题
@@ -214,6 +222,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String txtSearchWord = ((EditText) tableLayout.findViewById(R.id.txtSearchWord)).getText().toString();
+                        searchWord=txtSearchWord;
                         //ArrayList<Map<String, String>> items=null;
                         //items=SearchUseSql(txtSearchWord);
                         /* List<Words> swordList=new ArrayList<Words>();*/
@@ -230,6 +239,7 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                             //intent.putExtras(bundle);
                             //startActivity(intent);
                         }else{
+                            find=false;
                             Toast.makeText(MainActivity.this,"没有找到", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -242,6 +252,11 @@ public class MainActivity extends AppCompatActivity /*implements View.OnClickLis
                 })
                 .create()//创建对话框
                 .show();//显示对话框
+        if(!find) {
+            Intent intent = new Intent(this, WebSearch.class);
+            intent.putExtra("searchWord",searchWord);
+            startActivity(intent);
+        }
 
     }
 
